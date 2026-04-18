@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 선목 고등부 2-8 기도제목</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dawn-deep: #1a0e2e;
+    --dawn-purple: #2d1b4e;
+    --dawn-violet: #4a2c6e;
+    --dawn-rose: #c4607a;
+    --dawn-peach: #e8956d;
+    --dawn-gold: #f5c842;
+    --dawn-cream: #fdf0e0;
+    --dawn-mist: rgba(253,240,224,0.07);
+    --text-light: #fdf0e0;
+    --text-muted: rgba(253,240,224,0.55);
+    --card-bg: rgba(45,27,78,0.55);
+    --card-border: rgba(196,96,122,0.25);
+    --urgent-bg: rgba(196,96,122,0.18);
+    --urgent-border: rgba(245,200,66,0.5);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--dawn-deep);
+    color: var(--text-light);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SKY BACKGROUND ── */
+  .sky {
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(
+      180deg,
+      #0d0820 0%,
+      #1a0e2e 18%,
+      #2d1b4e 35%,
+      #4a2c6e 52%,
+      #7a3d6b 63%,
+      #c4607a 74%,
+      #e8956d 84%,
+      #f5c842 92%,
+      #fdf0e0 100%
+    );
+    overflow: hidden;
+  }
+
+  /* Stars */
+  .stars { position:absolute; inset:0; }
+  .star {
+    position:absolute; border-radius:50%;
+    background: white;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: var(--max, 0.9); transform: scale(1); }
+    50% { opacity: 0.1; transform: scale(0.5); }
+  }
+
+  /* Horizon glow */
+  .horizon-glow {
+    position:absolute; bottom:0; left:0; right:0; height:45%;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%,
+      rgba(245,200,66,0.45) 0%,
+      rgba(232,149,109,0.35) 30%,
+      rgba(196,96,122,0.2) 60%,
+      transparent 100%);
+  }
+
+  /* Clouds */
+  .cloud {
+    position:absolute;
+    border-radius: 50px;
+    opacity: 0.18;
+    animation: drift var(--cd, 80s) linear infinite;
+  }
+  @keyframes drift {
+    from { transform: translateX(-200px); }
+    to { transform: translateX(110vw); }
+  }
+
+  /* Silhouette landscape */
+  .silhouette {
+    position:absolute; bottom:0; left:0; right:0;
+    height: 220px;
+    background: #0d0820;
+    clip-path: polygon(
+      0% 100%, 0% 75%,
+      3% 72%, 6% 60%, 8% 55%, 9% 60%, 10% 50%,
+      11% 45%, 12% 52%, 14% 48%, 15% 40%,
+      17% 35%, 18% 42%, 20% 38%, 21% 32%,
+      22% 28%, 23% 35%, 25% 30%, 26% 25%,
+      27% 20%, 28% 27%, 30% 22%, 31% 18%,
+      32% 14%, 33% 20%, 35% 15%, 36% 10%,
+      37% 6%, 38% 12%, 40% 7%, 41% 4%,
+      42% 8%, 43% 3%, 44% 7%, 46% 5%,
+      47% 9%, 48% 6%, 50% 10%, 52% 7%,
+      54% 12%, 56% 8%, 58% 15%, 60% 10%,
+      62% 18%, 64% 13%, 66% 20%, 68% 15%,
+      70% 22%, 72% 18%, 74% 28%, 76% 22%,
+      78% 30%, 80% 25%, 82% 35%, 84% 28%,
+      86% 40%, 88% 33%, 90% 45%, 92% 38%,
+      94% 55%, 96% 48%, 98% 60%, 100% 55%,
+      100% 100%
+    );
+  }
+
+  /* ── SHOOTING STARS ── */
+  .shooting-star {
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: white;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .shooting-star::after {
+    content: '';
+    position: absolute;
+    top: 50%; right: 0;
+    transform: translateY(-50%);
+    width: 80px; height: 1.5px;
+    background: linear-gradient(to left, rgba(255,255,255,0.9), rgba(245,200,66,0.4), transparent);
+    border-radius: 2px;
+  }
+  @keyframes shoot {
+    0%   { opacity: 0; transform: translate(0, 0) rotate(var(--angle)); }
+    5%   { opacity: 1; }
+    80%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--angle)); }
+  }
+
+  /* Window frame overlay */
+  .window-frame {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  }
+  .window-frame::before {
+    content:'';
+    position:absolute; inset:0;
+    background:
+      linear-gradient(to right, rgba(13,8,32,0.85) 0%, transparent 8%, transparent 92%, rgba(13,8,32,0.85) 100%),
+      linear-gradient(to bottom, rgba(13,8,32,0.7) 0%, transparent 6%, transparent 94%, rgba(13,8,32,0.7) 100%);
+  }
+  /* Window cross bars */
+  .window-frame::after {
+    content:'';
+    position:absolute;
+    top: 6%; left: 50%; transform: translateX(-50%);
+    width: 2px; height: 88%;
+    background: rgba(253,240,224,0.08);
+    box-shadow: 0 0 8px rgba(245,200,66,0.1);
+  }
+  .h-bar {
+    position:fixed; z-index:1; pointer-events:none;
+    left:8%; right:8%; height:2px;
+    background: rgba(253,240,224,0.08);
+    box-shadow: 0 0 8px rgba(245,200,66,0.1);
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    position: relative; z-index: 2;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    margin-bottom: 52px;
+    animation: fadeUp 1.2s ease both;
+  }
+  .year-badge {
+    display: inline-block;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--dawn-gold);
+    text-transform: uppercase;
+    border: 1px solid rgba(245,200,66,0.35);
+    padding: 5px 18px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    background: rgba(245,200,66,0.06);
+  }
+  h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    color: var(--dawn-cream);
+    line-height: 1.3;
+    text-shadow: 0 0 40px rgba(245,200,66,0.3), 0 2px 12px rgba(0,0,0,0.5);
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    font-weight: 300;
+  }
+  .verse {
+    margin-top: 18px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    color: rgba(245,200,66,0.75);
+    font-style: italic;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 15px;
+    color: var(--dawn-gold);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    margin-top: 44px;
+  }
+  .section-title::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(to right, rgba(245,200,66,0.4), transparent);
+  }
+
+  /* ── STUDENT CARDS ── */
+  .students-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .student-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 22px 20px;
+    backdrop-filter: blur(12px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    animation: fadeUp 0.8s ease both;
+  }
+  .student-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35), 0 0 0 1px rgba(196,96,122,0.35);
+  }
+
+  .student-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, rgba(74,44,110,0.9), rgba(26,14,46,0.95));
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(196,96,122,0.35), inset 0 0 12px rgba(245,200,66,0.08);
+    border: 1px solid rgba(245,200,66,0.2);
+    padding: 8px;
+  }
+  .avatar svg { width: 100%; height: 100%; }
+  .student-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--dawn-cream);
+  }
+  .student-year {
+    font-size: 11px; color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .prayer-list {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .prayer-item {
+    display: flex; gap: 9px; align-items: flex-start;
+    font-size: 13px; color: rgba(253,240,224,0.82);
+    line-height: 1.6;
+  }
+  .prayer-dot {
+    margin-top: 6px; flex-shrink:0;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--dawn-rose);
+    box-shadow: 0 0 6px rgba(196,96,122,0.6);
+  }
+
+  /* ── URGENT SECTION ── */
+  .urgent-section {
+    margin-top: 44px;
+  }
+  .urgent-title {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 15px;
+    color: var(--dawn-gold);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .urgent-title .pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--dawn-gold);
+    box-shadow: 0 0 0 0 rgba(245,200,66,0.5);
+    animation: pulse 2s infinite;
+  }
+  .urgent-title::after {
+    content:''; flex:1; height:1px;
+    background: linear-gradient(to right, rgba(245,200,66,0.4), transparent);
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(245,200,66,0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(245,200,66,0); }
+    100% { box-shadow: 0 0 0 0 rgba(245,200,66,0); }
+  }
+
+  .urgent-cards {
+    display: flex; flex-direction: column; gap: 12px;
+    margin-bottom: 24px;
+  }
+  .urgent-card {
+    background: var(--urgent-bg);
+    border: 1px solid var(--urgent-border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    backdrop-filter: blur(10px);
+    display: flex; align-items: flex-start; gap: 14px;
+    animation: fadeUp 0.5s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+  .urgent-card::before {
+    content:'';
+    position:absolute; left:0; top:0; bottom:0; width:3px;
+    background: linear-gradient(to bottom, var(--dawn-gold), var(--dawn-rose));
+    border-radius: 3px 0 0 3px;
+  }
+  .urgent-icon {
+    font-size: 18px; flex-shrink:0; margin-top:1px;
+  }
+  .urgent-content { flex:1; }
+  .urgent-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--dawn-gold);
+    margin-bottom: 4px;
+  }
+  .urgent-text {
+    font-size: 13px; color: rgba(253,240,224,0.88); line-height: 1.65;
+  }
+  .urgent-date {
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 5px;
+  }
+  .urgent-delete {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 16px;
+    padding: 2px 4px; border-radius: 4px;
+    transition: color 0.2s;
+    flex-shrink:0;
+  }
+  .urgent-delete:hover { color: var(--dawn-rose); }
+
+  /* ── ADD URGENT FORM ── */
+  .add-form {
+    background: rgba(26,14,46,0.7);
+    border: 1px dashed rgba(245,200,66,0.3);
+    border-radius: 14px;
+    padding: 22px;
+    backdrop-filter: blur(10px);
+  }
+  .form-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px; color: var(--dawn-cream);
+    margin-bottom: 14px; letter-spacing: 0.5px;
+  }
+  .form-row {
+    display: flex; gap: 10px; margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .form-input {
+    background: rgba(253,240,224,0.06);
+    border: 1px solid rgba(253,240,224,0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--dawn-cream);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input::placeholder { color: var(--text-muted); }
+  .form-input:focus { border-color: rgba(245,200,66,0.5); }
+  .input-name { width: 140px; flex-shrink:0; }
+  .input-prayer { flex:1; min-width: 180px; }
+  .form-textarea {
+    width: 100%;
+    resize: vertical; min-height: 70px;
+  }
+  .btn-add {
+    background: linear-gradient(135deg, var(--dawn-rose), var(--dawn-peach));
+    border: none; border-radius: 8px;
+    color: white;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px; font-weight: 700;
+    padding: 11px 24px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+  .btn-add:hover { opacity:0.88; transform: translateY(-1px); }
+  .btn-add:active { transform: translateY(0); }
+
+  /* ── EMPTY STATE ── */
+  .empty-urgent {
+    text-align: center;
+    padding: 28px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(253,240,224,0.08);
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  footer .cross { font-size: 16px; margin-bottom: 6px; display:block; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  .student-card:nth-child(1) { animation-delay: 0.1s; }
+  .student-card:nth-child(2) { animation-delay: 0.2s; }
+  .student-card:nth-child(3) { animation-delay: 0.3s; }
+  .student-card:nth-child(4) { animation-delay: 0.4s; }
+  .student-card:nth-child(5) { animation-delay: 0.5s; }
+  .student-card:nth-child(6) { animation-delay: 0.6s; }
+
+  /* light beam */
+  .light-beam {
+    position: fixed;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 2px;
+    height: 60vh;
+    background: linear-gradient(to top, rgba(245,200,66,0.18), transparent);
+    pointer-events:none; z-index:1;
+    filter: blur(8px);
+  }
+
+  /* Candle flicker */
+  .candle-glow {
+    position: fixed;
+    bottom: 180px; right: 18%;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,200,66,0.25), transparent 70%);
+    pointer-events:none; z-index:1;
+    animation: flicker 2.5s ease-in-out infinite;
+  }
+  @keyframes flicker {
+    0%,100% { transform: scale(1); opacity:1; }
+    30% { transform: scale(1.1); opacity:0.8; }
+    60% { transform: scale(0.95); opacity:0.95; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sky -->
+<div class="sky">
+  <div class="stars" id="stars"></div>
+  <div class="horizon-glow"></div>
+  <!-- Clouds -->
+  <div class="cloud" style="width:160px;height:50px;background:#7a3d6b;bottom:38%;left:-5%;--cd:90s;animation-delay:-10s;"></div>
+  <div class="cloud" style="width:240px;height:65px;background:#c4607a;bottom:32%;left:20%;--cd:120s;animation-delay:-40s;opacity:0.12;"></div>
+  <div class="cloud" style="width:180px;height:55px;background:#e8956d;bottom:28%;left:60%;--cd:100s;animation-delay:-60s;opacity:0.14;"></div>
+  <div class="silhouette"></div>
+</div>
+
+<!-- Window frame -->
+<div class="window-frame"></div>
+<div class="h-bar" style="top:47%;"></div>
+<div class="light-beam"></div>
+<div class="candle-glow"></div>
+
+<!-- Content -->
+<div class="page">
+  <header>
+    <div class="year-badge">✦ 2026 · PRAYER REQUESTS✦</div>
+    <h1>함께 드리는 기도</h1>
+    <div class="subtitle">매일, 서로를 위해 기도합시다</div>
+    <div class="verse">"너희가 기도할 때에 무엇이든지 믿고 구하는 것은 다 받으리라" — 마태복음 21:22</div>
+  </header>
+
+  <!-- Annual Prayer section -->
+  <div class="section-title">✦ 2026 연간 기도제목</div>
+  <div class="students-grid" id="studentGrid"></div>
+
+  <!-- Urgent Prayer section -->
+  <div class="urgent-section">
+    <div class="urgent-title">
+      <span class="pulse-dot"></span>
+      긴급 기도제목
+    </div>
+    <div class="urgent-cards" id="urgentCards">
+      <div class="empty-urgent" id="emptyMsg">아직 긴급 기도제목이 없어요 🙏</div>
+    </div>
+
+    <div class="add-form">
+      <div class="form-title">✦ 긴급 기도제목 추가</div>
+      <div class="form-row">
+        <input class="form-input input-name" id="urgentName" placeholder="이름" maxlength="10">
+        <input class="form-input input-prayer" id="urgentShort" placeholder="기도제목 한 줄 요약">
+      </div>
+      <textarea class="form-input form-textarea" id="urgentDetail" placeholder="자세한 내용 (선택사항)"></textarea>
+      <br>
+      <button class="btn-add" onclick="addUrgent()">🕊 기도제목 올리기</button>
+    </div>
+  </div>
+
+  <footer>
+    <span class="cross">✝</span>
+    2026 선한목자교회 고등부 2-8 &nbsp;·&nbsp; 서로를 위해 중보합니다
+  </footer>
+</div>
+
+<script>
+// ── STARS ──
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 90; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  const top = Math.random() * 65;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${top}%; left:${Math.random()*100}%;
+    --max:${(Math.random()*0.6+0.3).toFixed(2)};
+    --dur:${(Math.random()*3+2).toFixed(1)}s;
+    --delay:-${(Math.random()*5).toFixed(1)}s;
+    opacity: ${top < 40 ? 0.8 : 0.2};
+  `;
+  starsEl.appendChild(s);
+}
+
+// ── SHOOTING STARS ──
+function launchShootingStars() {
+  const count = Math.floor(Math.random() * 2) + 2; // 2~3개
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'shooting-star';
+
+      // 화면 상단 ~ 중간에서 시작, 대각선 방향으로
+      const startX = Math.random() * 80 + 5;   // 5%~85%
+      const startY = Math.random() * 40;        // 0%~40%
+      const angle  = Math.random() * 20 + 20;  // 20deg~40deg (오른쪽 아래)
+      const dist   = Math.random() * 200 + 180; // 이동거리
+
+      const tx = Math.cos(angle * Math.PI / 180) * dist;
+      const ty = Math.sin(angle * Math.PI / 180) * dist;
+
+      el.style.cssText = `
+        left: ${startX}%;
+        top: ${startY}%;
+        --angle: ${angle}deg;
+        --tx: ${tx}px;
+        --ty: ${ty}px;
+        animation: shoot ${(Math.random() * 0.5 + 0.8).toFixed(2)}s ease-out forwards;
+      `;
+
+      starsEl.appendChild(el);
+      setTimeout(() => el.remove(), 1500);
+    }, i * (Math.random() * 300 + 100)); // 각 별 사이 살짝 간격
+  }
+}
+
+// 4~7초마다 별똥별 발사
+function scheduleShoot() {
+  const interval = Math.random() * 3000 + 4000; // 4000~7000ms
+  setTimeout(() => {
+    launchShootingStars();
+    scheduleShoot();
+  }, interval);
+}
+scheduleShoot();
+
+// ── STUDENT DATA ──
+const students = [
+  {
+    name: "하온",
+    grade: "",
+    prayers: [
+      "몸이 건강하게 유지되고 체력이 잘 관리될 수 있도록 지켜주세요"
+    ]
+  },
+  {
+    name: "하민",
+    grade: "",
+    prayers: [
+      "관계 속에서 지혜롭게 행동하고 마음이 평안할 수 있도록 도와주세요",
+      "진로에 대한 고민 가운데 하나님의 선한 인도하심이 있기를 기도해요"
+    ]
+  },
+  {
+    name: "하성",
+    grade: "",
+    prayers: [
+      "체력이 잘 유지되어 일상을 건강하게 감당할 수 있도록 해주세요",
+      "학업을 꾸준히 성실하게 이어갈 수 있도록 집중력과 끈기를 주세요"
+    ]
+  },
+  {
+    name: "한별",
+    grade: "",
+    prayers: [
+      "귀찮음을 이겨내고 매사에 적극적이고 성실한 태도로 변화될 수 있도록 도와주세요"
+    ]
+  },
+  {
+    name: "예준",
+    grade: "",
+    prayers: [
+      "몸과 마음이 모두 건강하게 유지될 수 있도록 지켜주세요"
+    ]
+  },
+  {
+    name: "지성",
+    grade: "",
+    prayers: [
+      "시간을 지혜롭게 사용하며 우선순위를 잘 세워갈 수 있도록 도와주세요"
+    ]
+  }
+];
+
+// ── NATURE ICONS (SVG, each unique) ──
+const icons = [
+  // 하온 — 초승달 + 별
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 6C13.373 6 8 11.373 8 18C8 24.627 13.373 30 20 30C23.09 30 25.9 28.84 28 26.93C26.32 27.3 24.55 27.14 22.87 26.36C18.1 24.1 15.97 18.43 18.23 13.66C19.43 11.08 21.56 9.26 24 8.44C22.74 7.02 21.45 6 20 6Z" fill="#f5c842" opacity="0.9"/>
+    <circle cx="25" cy="8" r="1.5" fill="#fdf0e0" opacity="0.9"/>
+    <circle cx="22" cy="4" r="1" fill="#fdf0e0" opacity="0.7"/>
+    <circle cx="28" cy="12" r="1" fill="#fdf0e0" opacity="0.6"/>
+  </svg>`,
+  // 하민 — 노을 구름
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="16" cy="20" rx="10" ry="6" fill="#e8956d" opacity="0.85"/>
+    <ellipse cx="11" cy="18" rx="6" ry="4.5" fill="#c4607a" opacity="0.9"/>
+    <ellipse cx="21" cy="17" rx="7" ry="5" fill="#e8956d" opacity="0.75"/>
+    <ellipse cx="16" cy="15" rx="8" ry="5.5" fill="#fdf0e0" opacity="0.7"/>
+    <rect x="6" y="24" width="20" height="2" rx="1" fill="#f5c842" opacity="0.5"/>
+    <rect x="4" y="26" width="24" height="1.5" rx="0.75" fill="#e8956d" opacity="0.35"/>
+  </svg>`,
+  // 하성 — 빛나는 별(큰)
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="16,4 18.5,12.5 27,12.5 20.5,17.5 23,26 16,21 9,26 11.5,17.5 5,12.5 13.5,12.5" fill="#f5c842" opacity="0.92"/>
+    <polygon points="16,7 17.8,13 23.5,13 19,16.2 20.8,22 16,18.8 11.2,22 13,16.2 8.5,13 14.2,13" fill="#fdf0e0" opacity="0.5"/>
+    <circle cx="16" cy="16" r="2" fill="white" opacity="0.8"/>
+  </svg>`,
+  // 한별 — 유성(별똥별)
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="6" y1="26" x2="22" y2="10" stroke="#fdf0e0" stroke-width="1.2" stroke-linecap="round" opacity="0.3"/>
+    <line x1="6" y1="28" x2="20" y2="14" stroke="#fdf0e0" stroke-width="0.8" stroke-linecap="round" opacity="0.2"/>
+    <circle cx="22" cy="10" r="3.5" fill="#f5c842" opacity="0.95"/>
+    <circle cx="22" cy="10" r="2" fill="white" opacity="0.8"/>
+    <circle cx="7" cy="8" r="1.2" fill="#fdf0e0" opacity="0.6"/>
+    <circle cx="25" cy="22" r="0.9" fill="#fdf0e0" opacity="0.5"/>
+    <circle cx="12" cy="5" r="0.8" fill="#f5c842" opacity="0.5"/>
+  </svg>`,
+  // 예준 — 해돋이
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="22" width="26" height="1.5" rx="0.75" fill="#4a2c6e" opacity="0.6"/>
+    <semicircle/>
+    <path d="M8 22 A8 8 0 0 1 24 22" fill="#f5c842" opacity="0.9"/>
+    <path d="M10 22 A6 6 0 0 1 22 22" fill="#fdf0e0" opacity="0.5"/>
+    <line x1="16" y1="8" x2="16" y2="5" stroke="#f5c842" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="22.5" y1="10" x2="24.5" y2="8" stroke="#f5c842" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="9.5" y1="10" x2="7.5" y2="8" stroke="#f5c842" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="25" y1="16" x2="28" y2="16" stroke="#f5c842" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="7" y1="16" x2="4" y2="16" stroke="#f5c842" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+  // 지성 — 은하수/별무리
+  `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#7a3d6b" stroke-width="5" opacity="0.5" stroke-linecap="round"/>
+    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#c4607a" stroke-width="2.5" opacity="0.5" stroke-linecap="round"/>
+    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#fdf0e0" stroke-width="0.8" opacity="0.4" stroke-linecap="round"/>
+    <circle cx="16" cy="16" r="2.5" fill="#f5c842" opacity="0.95"/>
+    <circle cx="8" cy="14" r="1" fill="white" opacity="0.7"/>
+    <circle cx="24" cy="18" r="1" fill="white" opacity="0.7"/>
+    <circle cx="11" cy="20" r="0.7" fill="white" opacity="0.5"/>
+    <circle cx="22" cy="12" r="0.7" fill="white" opacity="0.5"/>
+    <circle cx="19" cy="22" r="0.6" fill="#fdf0e0" opacity="0.5"/>
+  </svg>`,
+];
+
+// ── RENDER STUDENTS ──
+const grid = document.getElementById('studentGrid');
+students.forEach((s, i) => {
+  const card = document.createElement('div');
+  card.className = 'student-card';
+  card.innerHTML = `
+    <div class="student-header">
+      <div class="avatar">${icons[i] || ''}</div>
+      <div>
+        <div class="student-name">${s.name}</div>
+        <div class="student-year">${s.grade}</div>
+      </div>
+    </div>
+    <ul class="prayer-list">
+      ${s.prayers.map(p => `
+        <li class="prayer-item">
+          <span class="prayer-dot"></span>
+          <span>${p}</span>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+  grid.appendChild(card);
+});
+
+// ── URGENT PRAYERS ──
+let urgentList = JSON.parse(localStorage.getItem('urgentPrayers') || '[]');
+
+function saveUrgent() {
+  localStorage.setItem('urgentPrayers', JSON.stringify(urgentList));
+}
+
+function renderUrgent() {
+  const container = document.getElementById('urgentCards');
+  const emptyMsg = document.getElementById('emptyMsg');
+
+  // Remove old cards (keep emptyMsg)
+  Array.from(container.children).forEach(c => {
+    if (c.id !== 'emptyMsg') c.remove();
+  });
+
+  if (urgentList.length === 0) {
+    emptyMsg.style.display = 'block';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+
+  urgentList.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'urgent-card';
+    card.innerHTML = `
+      <div class="urgent-icon">🙏</div>
+      <div class="urgent-content">
+        <div class="urgent-name">${item.name}</div>
+        <div class="urgent-text">${item.prayer}</div>
+        ${item.detail ? `<div class="urgent-text" style="margin-top:5px;opacity:0.75;font-size:12px;">${item.detail}</div>` : ''}
+        <div class="urgent-date">${item.date}</div>
+      </div>
+      <button class="urgent-delete" onclick="deleteUrgent(${idx})" title="삭제">✕</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function addUrgent() {
+  const name = document.getElementById('urgentName').value.trim();
+  const prayer = document.getElementById('urgentShort').value.trim();
+  const detail = document.getElementById('urgentDetail').value.trim();
+
+  if (!name || !prayer) {
+    alert('이름과 기도제목을 입력해 주세요 🙏');
+    return;
+  }
+
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  urgentList.unshift({ name, prayer, detail, date: dateStr });
+  saveUrgent();
+  renderUrgent();
+
+  document.getElementById('urgentName').value = '';
+  document.getElementById('urgentShort').value = '';
+  document.getElementById('urgentDetail').value = '';
+}
+
+function deleteUrgent(idx) {
+  if (confirm(`"${urgentList[idx].name}"의 기도제목을 삭제할까요?`)) {
+    urgentList.splice(idx, 1);
+    saveUrgent();
+    renderUrgent();
+  }
+}
+
+renderUrgent();
+</script>
+</body>
+</html>
