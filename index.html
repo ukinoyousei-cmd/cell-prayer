@@ -539,7 +539,7 @@
   </footer>
 </div>
 
-<script>
+<script type="module">
 // ── STARS ──
 const starsEl = document.getElementById('stars');
 for (let i = 0; i < 90; i++) {
@@ -733,46 +733,68 @@ students.forEach((s, i) => {
   grid.appendChild(card);
 });
 
-// ── URGENT PRAYERS ──
-let urgentList = JSON.parse(localStorage.getItem('urgentPrayers') || '[]');
+// ── FIREBASE 연동 ──
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-function saveUrgent() {
-  localStorage.setItem('urgentPrayers', JSON.stringify(urgentList));
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyBNrnvQGOsBq7FRBa_oYgK-60B6cpCfWQA",
+  authDomain: "prayer-4e4ce.firebaseapp.com",
+  projectId: "prayer-4e4ce",
+  storageBucket: "prayer-4e4ce.firebasestorage.app",
+  messagingSenderId: "825165140265",
+  appId: "1:825165140265:web:c166d48b8eb2d7fc8b2738"
+};
 
-function renderUrgent() {
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const urgentCol = collection(db, "urgentPrayers");
+
+// 실시간 감지 — 누군가 추가/삭제하면 모두에게 즉시 반영
+const q = query(urgentCol, orderBy("createdAt", "desc"));
+onSnapshot(q, (snapshot) => {
   const container = document.getElementById('urgentCards');
   const emptyMsg = document.getElementById('emptyMsg');
 
-  // Remove old cards (keep emptyMsg)
   Array.from(container.children).forEach(c => {
     if (c.id !== 'emptyMsg') c.remove();
   });
 
-  if (urgentList.length === 0) {
+  if (snapshot.empty) {
     emptyMsg.style.display = 'block';
     return;
   }
   emptyMsg.style.display = 'none';
 
-  urgentList.forEach((item, idx) => {
+  snapshot.forEach((docSnap) => {
+    const item = docSnap.data();
+    const id = docSnap.id;
+
+    const dateStr = item.createdAt
+      ? (() => {
+          const d = item.createdAt.toDate();
+          return `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
+        })()
+      : '';
+
     const card = document.createElement('div');
     card.className = 'urgent-card';
+    card.style.animation = 'fadeUp 0.4s ease both';
     card.innerHTML = `
       <div class="urgent-icon">🙏</div>
       <div class="urgent-content">
         <div class="urgent-name">${item.name}</div>
         <div class="urgent-text">${item.prayer}</div>
         ${item.detail ? `<div class="urgent-text" style="margin-top:5px;opacity:0.75;font-size:12px;">${item.detail}</div>` : ''}
-        <div class="urgent-date">${item.date}</div>
+        <div class="urgent-date">${dateStr}</div>
       </div>
-      <button class="urgent-delete" onclick="deleteUrgent(${idx})" title="삭제">✕</button>
+      <button class="urgent-delete" onclick="deleteUrgent('${id}')" title="삭제">✕</button>
     `;
     container.appendChild(card);
   });
-}
+});
 
-function addUrgent() {
+async function addUrgent() {
   const name = document.getElementById('urgentName').value.trim();
   const prayer = document.getElementById('urgentShort').value.trim();
   const detail = document.getElementById('urgentDetail').value.trim();
@@ -782,27 +804,32 @@ function addUrgent() {
     return;
   }
 
-  const now = new Date();
-  const dateStr = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const btn = document.querySelector('.btn-add');
+  btn.disabled = true;
+  btn.textContent = '올리는 중...';
 
-  urgentList.unshift({ name, prayer, detail, date: dateStr });
-  saveUrgent();
-  renderUrgent();
+  try {
+    await addDoc(urgentCol, { name, prayer, detail, createdAt: serverTimestamp() });
+    document.getElementById('urgentName').value = '';
+    document.getElementById('urgentShort').value = '';
+    document.getElementById('urgentDetail').value = '';
+  } catch (e) {
+    alert('저장 중 오류가 났어요. 잠시 후 다시 시도해 주세요.');
+  }
 
-  document.getElementById('urgentName').value = '';
-  document.getElementById('urgentShort').value = '';
-  document.getElementById('urgentDetail').value = '';
+  btn.disabled = false;
+  btn.innerHTML = '🕊 기도제목 올리기';
 }
 
-function deleteUrgent(idx) {
-  if (confirm(`"${urgentList[idx].name}"의 기도제목을 삭제할까요?`)) {
-    urgentList.splice(idx, 1);
-    saveUrgent();
-    renderUrgent();
+async function deleteUrgent(id) {
+  if (confirm('이 기도제목을 삭제할까요?')) {
+    await deleteDoc(doc(db, "urgentPrayers", id));
   }
 }
 
-renderUrgent();
+window.addUrgent = addUrgent;
+window.deleteUrgent = deleteUrgent;
 </script>
 </body>
 </html>
+
